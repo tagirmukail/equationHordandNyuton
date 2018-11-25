@@ -21,7 +21,7 @@ double Equation::IsIntervalFabs()
 // нахождение результата уравнения от x
 double Equation::findEquation(double x)
 {
-    return pow(x, 2.0) - (2 * x) - 4;
+    return pow(x, 4.0) - (2 * x) - 4;
 }
 // нахождение первой производной функции
 double Equation::findDerivativeEquation1(double x)
@@ -77,20 +77,25 @@ double Equation::findToMethodNyutona()
 
     double initX = Equation::initApproximation();
 
-    double x0 = initX;
-    double x1 = initX - Equation::findEquation(initX) / Equation::findDerivativeEquation1(initX);
+    Equation::leftPointX = initX;
+    Equation::rightPointX = initX - Equation::findEquation(initX) / Equation::findDerivativeEquation1(initX);
 
-    Equation::setPoint(x0, Equation::findEquation(x0));
-    Equation::setPoint(x1, Equation::findEquation(x1));
+    Equation::setPoint(Equation::leftPointX, Equation::findEquation(Equation::leftPointX));
+    Equation::setPoint(Equation::rightPointX, Equation::findEquation(Equation::rightPointX));
 
-    while(abs(x1 - x0) > Equation::accuracy) 
+    while(Equation::IsIntervalFabs()) 
     {
-        x0 = x1;
-        x1 = x1 - Equation::findEquation(x1) / Equation::findDerivativeEquation1(x1);
+        Equation::leftPointX = Equation::rightPointX;
+        Equation::rightPointX = Equation::rightPointX - Equation::findEquation(Equation::rightPointX) / Equation::findDerivativeEquation1(Equation::rightPointX);
 
-        Equation::setPoint(x0, Equation::findEquation(x0));
-        Equation::setPoint(x1, Equation::findEquation(x1));
+        Equation::setPoint(Equation::leftPointX, Equation::findEquation(Equation::leftPointX));
+        Equation::setPoint(Equation::rightPointX, Equation::findEquation(Equation::rightPointX));
     }
 
-    return x1;
+    return Equation::rightPointX;
+}
+
+Equation::~Equation()
+{
+
 }
